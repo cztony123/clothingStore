@@ -1,6 +1,5 @@
 <template>
     <!-- 最外层盒子 -->
-    123
     <div class="layout-box">
         <!-- 内容区 -->
         <div class="Content">
