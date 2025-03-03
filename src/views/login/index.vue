@@ -1,7 +1,6 @@
 <template>
     <!-- 最外层盒子 -->
     <div class="layout-box">
-        <div>测试</div>
         <!-- 内容区 -->
         <div class="Content">
             <div class="layout-logo">
