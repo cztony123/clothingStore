@@ -55,12 +55,12 @@
             <div v-if="showLogin">
                 <!-- 账号 -->
                 <div class="account">
-                    <input v-model="loginForm.username" type="text" class="input-field" placeholder="账号" required>
+                    <input v-model="loginForm.userName" type="text" class="input-field" placeholder="账号" required>
                     <svg-icon class="icon" icon-file-name="avatar-user-svgrepo-com" />
                 </div>
                 <!-- 密码 -->
                 <div class="password">
-                    <input :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
+                    <input v-model="loginForm.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
                     <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                     <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                     <svg-icon class="eye-icon" :icon-file-name="passwordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('password')" />
@@ -98,8 +98,10 @@
             </div>
         </div>
        
-       <!-- 提示框 -->
-       <div class="showRules" :style="{'opacity': isOpacity}">{{showRules ? '请输入账号' : '请输入密码'}}</div>
+       <!-- 校验框 -->
+        <div class="verify" ref="verify">
+            {{text}}
+        </div>
     </div>
 </template>
 
@@ -115,20 +117,19 @@ export default {
             showLogin: true,
             passwordVisible: false,
             confirmPasswordVisible: false,
-              isOpacity: 0,
             errorMessage: '',
             showRules: '',
 
 
             //配置登录数据
             loginForm: {
-                username: null,
+                userName: null,
                 password: null,
                 phone: null,
                 code: null,
             },
 
-            isOpacity: 0
+            text: null //用于校验提示框文字输出
         };
     },
     methods: {
@@ -152,23 +153,30 @@ export default {
 
           //登录按钮
         handleLogin() {
-            if (!this.loginForm.username) {
-                this.showRules('请输入账号');
-            } else if (!this.loginForm.password) {
-                this.showRules('请输入密码');
-            } else {
-                // 执行登录逻辑
-                console.log('登录成功');
+            //校验用户名
+            if(!this.loginForm.userName){
+                console.log('123')
+                this.handleDialog() //调用提示框函数
+                this.text = '请输入账号' // 提示框文字
+                return 
+            }
+
+            //校验密码
+            if(!this.loginForm.password){
+                this.handleDialog() //调用提示框函数
+                this.text = '请输入密码' // 提示框文字
+                return 
             }
         },
 
-        showRules(message) {
-            this.errorMessage = message;
-            this.isOpacity = '1';
+        //提示框函数
+        handleDialog(){
+            this.$refs.verify.style.opacity = 1
+            this.$refs.verify.style.visibility = 'visible' // 可见
             setTimeout(() => {
-                this.isOpacity = '0';
-                this.errorMessage = '';
-            }, 1000);
+                this.$refs.verify.style.opacity = 0; // 设置不透明度为1
+                this.$refs.verify.style.visibility = 'hidden' // 不可见
+            }, 1500);
         }
     },
 };
@@ -360,19 +368,21 @@ export default {
 // #endregion
 
 
-.showRules{
+// 校验弹出框
+.verify{
     position: absolute;
+    background: rgba(103, 104, 104, 0.7);
+    width: 50%;
+    height: 2.5rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
-    height: 3.125rem;
-    background: #696969;
-    color: #fff;
-    line-height: 3.125rem;
+    line-height: 2.5rem;
     text-align: center;
-    border-radius: 1.875rem;
-    opacity: 0; /* 初始状态显示 */
-    transition: opacity 0.5s ease-in-out; /* 3秒动画 */
+    border-radius: 1.25rem;
+    color: #d1d1d1;
+    visibility: hidden; /* 初始不可见 */
+    opacity: 0; //设置成透明
+    transition: all 800ms;
 }
 </style>
