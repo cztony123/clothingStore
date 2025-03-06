@@ -86,6 +86,10 @@
             <div class="switch-login">
                 <span @click="handleShowLogin">{{showLogin ? '手机号登录' : '账号登录'}}</span>
                 <span>忘记密码?</span>
+                <span>忘记密码?</span>
+                <span>忘记密码?</span>
+                <span>忘记密码?</span>
+                <span>忘记密码?</span>
             </div>
 
             <div>
