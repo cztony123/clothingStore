@@ -86,10 +86,6 @@
             <div class="switch-login">
                 <span @click="handleShowLogin">{{showLogin ? '手机号登录' : '账号登录'}}</span>
                 <span>忘记密码?</span>
-                <span>忘记密码?</span>
-                <span>忘记密码?</span>
-                <span>忘记密码?</span>
-                <span>忘记密码?</span>
             </div>
 
             <div>
@@ -98,13 +94,11 @@
             <!-- 注册跳转按钮 -->
             <div class="login-link">
                 <span @click="toggleForm">没有账号? 注册 </span>
-                <span @click="toggleForm">没有账号? 注册 </span>
-                <span @click="toggleForm">没有账号? 注册 </span>
             </div>
         </div>
        
        <!-- 提示框 -->
-       <div class="showRules" :style="{'opacity': isOpacity}">请输入账号</div>
+       <div class="showRules" :style="{'opacity': isOpacity}">{{showRules ? '请输入账号' : '请输入密码'}}</div>
     </div>
 </template>
 
@@ -120,6 +114,9 @@ export default {
             showLogin: true,
             passwordVisible: false,
             confirmPasswordVisible: false,
+              isOpacity: 0,
+            errorMessage: '',
+            showRules: '',
 
 
             //配置登录数据
@@ -152,21 +149,24 @@ export default {
             }
         },
 
-        //登录按钮
+          //登录按钮
         handleLogin() {
-            if(!this.loginForm.username){
-                console.log(this.loginForm.username)
-                this.showRules()
+            if (!this.loginForm.username) {
+                this.showRules('请输入账号');
+            } else if (!this.loginForm.password) {
+                this.showRules('请输入密码');
+            } else {
+                // 执行登录逻辑
+                console.log('登录成功');
             }
-            
         },
 
-        //校验弹窗
-        showRules() {
-            this.isOpacity = '1'
-            setTimeout(function() {
-                this.isOpacity = '0'
-                console.log('000')
+        showRules(message) {
+            this.errorMessage = message;
+            this.isOpacity = '1';
+            setTimeout(() => {
+                this.isOpacity = '0';
+                this.errorMessage = '';
             }, 1000);
         }
     },
