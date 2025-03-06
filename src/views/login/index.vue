@@ -94,6 +94,8 @@
             <!-- 注册跳转按钮 -->
             <div class="login-link">
                 <span @click="toggleForm">没有账号? 注册 </span>
+                <span @click="toggleForm">没有账号? 注册 </span>
+                <span @click="toggleForm">没有账号? 注册 </span>
             </div>
         </div>
        
