@@ -1,6 +1,6 @@
 <template>
     <div class="layout-box">
-             <!-- 注册 -->
+        <!-- 注册 -->
         <div class="content" v-if="isRegister">
             <div class="logo">
                 <img src="../../assets/logo.png" alt="logo">
@@ -94,11 +94,10 @@
             <!-- 注册跳转按钮 -->
             <div class="login-link">
                 <span @click="toggleForm">没有账号? 注册 </span>
-                <span @click="toggleForm">没有账号? 注册 </span>
             </div>
         </div>
-       
-       <!-- 校验框 -->
+
+        <!-- 校验框 -->
         <div class="verify" ref="verify">
             {{text}}
         </div>
@@ -117,7 +116,6 @@ export default {
             showLogin: true,
             passwordVisible: false,
             confirmPasswordVisible: false,
-            errorMessage: '',
             showRules: '',
 
 
@@ -151,26 +149,56 @@ export default {
             }
         },
 
-          //登录按钮
+        //登录按钮
         handleLogin() {
             //校验用户名
-            if(!this.loginForm.userName){
-                console.log('123')
+            if (!this.loginForm.userName) {
                 this.handleDialog() //调用提示框函数
                 this.text = '请输入账号' // 提示框文字
-                return 
+                return
+            }
+
+            //校验账号长度
+            if (this.loginForm.userName.length < 4) {
+                this.handleDialog() //调用提示框函数
+                this.text = '账号长度不能小于4位' // 提示框文字
+                return
+            } if (!this.loginForm.userName.match(/^[a-zA-Z0-9_]+$/)) {
+                this.handleDialog() //调用提示框函数
+                this.text = '账号只能包含字母、数字、下划线' // 提示框文字
+                return
+            }// 账号最大长度校验
+            if (this.loginForm.userName.length > 6) {
+                this.handleDialog()
+                this.text = '账号长度不能大于6位' // 提示框文字
+                return;
             }
 
             //校验密码
-            if(!this.loginForm.password){
+            if (!this.loginForm.password) {
                 this.handleDialog() //调用提示框函数
                 this.text = '请输入密码' // 提示框文字
-                return 
+                return
+            } else if (this.loginForm.password.length < 6) {
+                this.handleDialog() //调用提示框函数
+                this.text = '密码长度不能小于6位' // 提示框文字
+                return
+            }
+            // 密码最大长度校验
+            if (this.loginForm.password.length > 8) {
+                this.handleDialog();
+                this.text = '密码长度不能大于8位' // 提示框文字
+                return;
+            }
+            if(!this.loginForm.password.match(/^[a-zA-Z0-9_]+$/)){
+                this.handleDialog() //调用提示框函数
+                this.text = '密码只能包含字母、数字、下划线' // 提示框文字
+                return
             }
         },
 
         //提示框函数
-        handleDialog(){
+        handleDialog() {
             this.$refs.verify.style.opacity = 1
             this.$refs.verify.style.visibility = 'visible' // 可见
             setTimeout(() => {
@@ -367,9 +395,8 @@ export default {
 }
 // #endregion
 
-
 // 校验弹出框
-.verify{
+.verify {
     position: absolute;
     background: rgba(103, 104, 104, 0.7);
     width: 50%;
