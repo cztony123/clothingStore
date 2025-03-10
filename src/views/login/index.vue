@@ -7,24 +7,24 @@
             </div>
             <!-- 账号 -->
             <div class="account">
-                <input v-model="username" type="text" class="input-field" placeholder="账号" required>
+                <input v-model="registerForm.username" type="text" class="input-field" placeholder="账号" required>
                 <svg-icon class="icon" icon-file-name="avatar-user-svgrepo-com" />
             </div>
             <!-- 手机号码 -->
             <div class="phone">
-                <input v-model="phone" type="text" class="input-field" placeholder="手机号" required>
+                <input v-model="registerForm.phone" type="text" class="input-field" placeholder="手机号" required>
                 <svg-icon class="icon" icon-file-name="phone2-o-svgrepo-com" />
             </div>
 
             <!-- 密码 -->
             <div class="password">
-                <input v-model="password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
+                <input v-model="registerForm.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
                 <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                 <svg-icon class="eye-icon" :icon-file-name="passwordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('password')" />
             </div>
             <!-- 确认密码 -->
             <div class="password">
-                <input v-model="confirmPassword" :type="confirmPasswordVisible ? 'text' : 'password'" class="input-field" placeholder="确认密码" required>
+                <input v-model="registerForm.confirmPassword" :type="confirmPasswordVisible ? 'text' : 'password'" class="input-field" placeholder="确认密码" required>
                 <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                 <svg-icon class="eye-icon" :icon-file-name="confirmPasswordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('confirmPassword')" />
             </div>
@@ -36,7 +36,7 @@
             </div>
             <!-- 注册按钮 -->
             <div>
-                <button class="register-btn" @click=" ">注册</button>
+                <button class="register-btn" @click="handleRegister ">注册</button>
             </div>
             <!-- 注册跳转按钮 -->
             <div class="login-link">
@@ -127,6 +127,14 @@ export default {
                 code: null,
             },
 
+            // 配置注册数据
+            registerForm: {
+                userName: null,
+                phone: null,
+                password: null,
+                confirmPassword: null,
+            },
+
             text: null //用于校验提示框文字输出
         };
     },
@@ -148,7 +156,25 @@ export default {
                 this.confirmPasswordVisible = !this.confirmPasswordVisible;
             }
         },
+    
 
+        // 注册按钮
+        handleRegister() {
+            // 校验用户名
+            if (!this.registerForm.userName) {
+                this.handleDialog() //调用提示框函数
+                this.text = '请输入账号' // 提示框文字
+                return
+            }  
+            //校验账号长度
+            if (this.registerForm.userName.length < 4  || this.registerForm.userName.length > 12) {
+                this.handleDialog();
+                this.text = '账号长度不能小于4位大于6位' // 提示框文字
+                return
+            } 
+
+            console.log(this.registerForm.userName)
+        },
         //登录按钮
         handleLogin() {
             //校验用户名
@@ -159,40 +185,37 @@ export default {
             }
 
             //校验账号长度
-            if (this.loginForm.userName.length < 4) {
-                this.handleDialog() //调用提示框函数
-                this.text = '账号长度不能小于4位' // 提示框文字
+            if (this.loginForm.userName.length < 4  || this.loginForm.userName.length > 12) {
+                this.handleDialog();
+                this.text = '账号长度不能小于4位大于6位' // 提示框文字
                 return
-            } if (!this.loginForm.userName.match(/^[a-zA-Z0-9_]+$/)) {
+            }
+
+            //校验账号是否包含字母、数字、下划线
+            if (!this.loginForm.userName.match(/^[a-zA-Z0-9_]+$/)) {
                 this.handleDialog() //调用提示框函数
                 this.text = '账号只能包含字母、数字、下划线' // 提示框文字
                 return
-            }// 账号最大长度校验
-            if (this.loginForm.userName.length > 6) {
-                this.handleDialog()
-                this.text = '账号长度不能大于6位' // 提示框文字
-                return;
             }
+            
 
             //校验密码
             if (!this.loginForm.password) {
                 this.handleDialog() //调用提示框函数
                 this.text = '请输入密码' // 提示框文字
                 return
-            } else if (this.loginForm.password.length < 6) {
-                this.handleDialog() //调用提示框函数
-                this.text = '密码长度不能小于6位' // 提示框文字
+            }
+
+            //校验密码长度
+            if (this.loginForm.password.length < 4  || this.loginForm.password.length > 12) {
+                this.handleDialog();
+                this.text = '密码长度不能小于4位大于6位' // 提示框文字
                 return
             }
-            // 密码最大长度校验
-            if (this.loginForm.password.length > 8) {
-                this.handleDialog();
-                this.text = '密码长度不能大于8位' // 提示框文字
-                return;
-            }
-            if(!this.loginForm.password.match(/^[a-zA-Z0-9_]+$/)){
+            //校验密码是否包含字母、数字、下划线
+            if (!this.loginForm.password.match(/^[a-zA-Z0-9_]+$/)) {
                 this.handleDialog() //调用提示框函数
-                this.text = '密码只能包含字母、数字、下划线' // 提示框文字
+                this.text = '账号只能包含字母、数字、下划线' // 提示框文字
                 return
             }
         },
