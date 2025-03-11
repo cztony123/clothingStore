@@ -1,101 +1,57 @@
 <template>
     <div class="layout-box">
         <!-- 注册 -->
-        <div class="content" v-if="isRegister">
+        <div class="content">
             <div class="logo">
                 <img src="../../assets/logo.png" alt="logo">
             </div>
+
             <!-- 账号 -->
-            <div class="account">
-                <input v-model="registerForm.username" type="text" class="input-field" placeholder="账号" required>
+            <div class="account" v-if="isRegister || showLogin ">
+                <input v-model="form.username" type="text" class="input-field" placeholder="账号" required>
                 <svg-icon class="icon" icon-file-name="avatar-user-svgrepo-com" />
             </div>
             <!-- 手机号码 -->
-            <div class="phone">
-                <input v-model="registerForm.phone" type="text" class="input-field" placeholder="手机号" required>
+            <div class="phone" v-if="isRegister || !showLogin ">
+                <input v-model="form.phone" type="text" class="input-field" placeholder="手机号" required>
                 <svg-icon class="icon" icon-file-name="phone2-o-svgrepo-com" />
             </div>
 
             <!-- 密码 -->
-            <div class="password">
-                <input v-model="registerForm.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
+            <div class="password" v-if="isRegister || showLogin ">
+                <input v-model="form.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
                 <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                 <svg-icon class="eye-icon" :icon-file-name="passwordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('password')" />
             </div>
             <!-- 确认密码 -->
-            <div class="password">
-                <input v-model="registerForm.confirmPassword" :type="confirmPasswordVisible ? 'text' : 'password'" class="input-field" placeholder="确认密码" required>
+            <div class="password" v-if="isRegister">
+                <input v-model="form.confirmPassword" :type="confirmPasswordVisible ? 'text' : 'password'" class="input-field" placeholder="确认密码" required>
                 <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                 <svg-icon class="eye-icon" :icon-file-name="confirmPasswordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('confirmPassword')" />
             </div>
             <!-- 验证码区域 -->
-            <div class="login-code">
+            <div class="login-code" v-if="isRegister || !showLogin ">
                 <svg-icon class="icon" icon-file-name="shield-check-svgrepo-com" />
                 <input type="text" class="input-field" placeholder="验证码" required>
                 <button class="get-code">获取验证码</button>
             </div>
-            <!-- 注册按钮 -->
-            <div>
-                <button class="register-btn" @click="handleRegister ">注册</button>
-            </div>
-            <!-- 注册跳转按钮 -->
-            <div class="login-link">
-                <span @click="toggleForm">已有账号? 登录 </span>
-            </div>
-
-        </div>
-
-        <!-- 登录页 -->
-        <div class="content" v-else>
-            <div class="logo">
-                <img src="../../assets/logo.png" alt="logo">
-            </div>
-
-            <!-- 账号登录 -->
-            <div v-if="showLogin">
-                <!-- 账号 -->
-                <div class="account">
-                    <input v-model="loginForm.userName" type="text" class="input-field" placeholder="账号" required>
-                    <svg-icon class="icon" icon-file-name="avatar-user-svgrepo-com" />
-                </div>
-                <!-- 密码 -->
-                <div class="password">
-                    <input v-model="loginForm.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
-                    <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
-                    <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
-                    <svg-icon class="eye-icon" :icon-file-name="passwordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('password')" />
-                </div>
-            </div>
-
-            <!-- 手机号登录 -->
-            <div v-else>
-                <!-- 手机号码 -->
-                <div class="phone">
-                    <input type="text" class="input-field" placeholder="手机号" required>
-                    <svg-icon class="icon" icon-file-name="phone2-o-svgrepo-com" />
-                </div>
-                <!-- 验证码区域 -->
-                <div class="login-code">
-                    <svg-icon class="icon" icon-file-name="shield-check-svgrepo-com" />
-                    <input type="text" class="input-field" placeholder="验证码" required>
-                    <button class="get-code">获取验证码</button>
-                </div>
-            </div>
-
             <!-- 切换登录按钮 -->
-            <div class="switch-login">
+            <div class="switch-login" v-if="!isRegister">
                 <span @click="handleShowLogin">{{showLogin ? '手机号登录' : '账号登录'}}</span>
                 <span>忘记密码?</span>
             </div>
-
+            <!-- 注册按钮 -->
             <div>
-                <button class="login-btn" @click="handleLogin">登录</button>
+                <button class="register-btn" @click="handleRegister ">{{isRegister ? "注册" : "登录"}}</button>
             </div>
             <!-- 注册跳转按钮 -->
             <div class="login-link">
-                <span @click="toggleForm">没有账号? 注册 </span>
+                <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
             </div>
+
         </div>
+
+        
 
         <!-- 校验框 -->
         <div class="verify" ref="verify">
@@ -108,33 +64,19 @@
 export default {
     data() {
         return {
-            username: '', // 账号为空
-            phone: '',
-            password: '',  // 密码为空
-            confirmPassword: '', // 确认密码
-            isRegister: false, // 控制显示注册页还是登录页
-            showLogin: true,
+            isRegister: false, // 控制显示注册页还是登录页 false显示注册页 true 显示登录页
+            showLogin: true,  // 控制显示登录页还是注册页 true 账号登录 false 手机号登录
             passwordVisible: false,
             confirmPasswordVisible: false,
-            showRules: '',
 
 
             //配置登录数据
-            loginForm: {
+            form: {
                 userName: null,
                 password: null,
                 phone: null,
                 code: null,
             },
-
-            // 配置注册数据
-            registerForm: {
-                userName: null,
-                phone: null,
-                password: null,
-                confirmPassword: null,
-            },
-
             text: null //用于校验提示框文字输出
         };
     },
@@ -395,7 +337,7 @@ export default {
     border: none;
     background: #9edad0;
     color: #e6e6e6;
-    margin-top: 40px;
+    margin-top: 5px;
     font-size: 1.125rem;
 }
 // 登录按钮样式
