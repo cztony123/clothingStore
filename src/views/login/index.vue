@@ -62,7 +62,6 @@
                 <div class="password">
                     <input v-model="loginForm.password" :type="passwordVisible ? 'text' : 'password'" class="input-field" placeholder="密码" required>
                     <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
-                    <svg-icon class="icon" icon-file-name="padlock-lock-svgrepo-com" />
                     <svg-icon class="eye-icon" :icon-file-name="passwordVisible ? 'eye-open-svgrepo-com' : 'eye-closed-svgrepo-com'" @click="handleEye('password')" />
                 </div>
             </div>
@@ -93,9 +92,6 @@
             </div>
             <!-- 注册跳转按钮 -->
             <div class="login-link">
-                <span @click="toggleForm">没有账号? 注册 </span>
-                <span @click="toggleForm">没有账号? 注册 </span>
-                <span @click="toggleForm">没有账号? 注册 </span>
                 <span @click="toggleForm">没有账号? 注册 </span>
             </div>
         </div>
