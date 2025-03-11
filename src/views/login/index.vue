@@ -1,6 +1,6 @@
 <template>
     <div class="layout-box">
-        <!-- 登录注册登录 -->
+        <!-- 登录注册 -->
         <div class="content">
             <div class="logo">
                 <img src="../../assets/logo.png" alt="logo">
