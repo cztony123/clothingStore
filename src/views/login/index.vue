@@ -109,14 +109,57 @@ export default {
                 return
             }  
             //校验账号长度
-            if (this.registerForm.userName.length < 4  || this.registerForm.userName.length > 12) {
+            if (this.registerForm.userName.length < 4  || this.registerForm.userName.length > 6) {
                 this.handleDialog();
                 this.text = '账号长度不能小于4位大于6位' // 提示框文字
                 return
             } 
+            //校验账号是否包含字母、数字、下划线
+            if (!this.registerForm.userName.match(/^[a-zA-Z0-9_]+$/)) {
+                this.handleDialog() //调用提示框函数
+                this.text = '账号只能包含字母、数字、下划线' // 提示框文字
+                return
+            }
+                //校验手机号
+                if (!this.registerForm.phone) {
+                    this.handleDialog() //调用提示框函数
+                    this.text = '请输入手机号' // 提示框文字
+                    return
+                }
+            // 手机号校验规则
+            if (!this.registerForm.phone.match(/^1[3-9]\d{9}$/)) {
+                this.handleDialog() //调用提示框函数
+                this.text = '请输入有效的手机号码' // 提示框文字
+                return
+            }
 
-            console.log(this.registerForm.userName)
+             //校验密码
+            if (!this.registerForm.password) {
+                this.handleDialog() //调用提示框函数
+                this.text = '请输入密码' // 提示框文字
+                return
+            }
+
+            //校验密码长度
+            if (this.registerForm.password.length < 4  || this.registerForm.password.length > 12) {
+                this.handleDialog();
+                this.text = '密码长度不能小于4位大于6位' // 提示框文字
+                return
+            }
+            //校验密码是否包含字母、数字、下划线
+            if (!this.registerForm.password.match(/^[a-zA-Z0-9_]+$/)) {
+                this.handleDialog() //调用提示框函数
+                this.text = '账号只能包含字母、数字、下划线' // 提示框文字
+                return
+            }
+            if (this.registerForm.password !== this.registerForm.confirmPassword) {
+                this.handleDialog() //调用提示框函数
+                this.text = '两次输入的密码不一致' // 提示框文字
+                return
+            }
         },
+
+
         //登录按钮
         handleLogin() {
             //校验用户名
