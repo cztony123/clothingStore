@@ -47,6 +47,10 @@
             <!-- 注册跳转按钮 -->
             <div class="login-link">
                 <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
+                <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
+                <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
+                <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
+                <span @click="toggleForm">{{isRegister ? "已有账号? 登录" : "没有账号? 注册"}}</span>
             </div>
 
         </div>
